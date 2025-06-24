@@ -1,0 +1,114 @@
+-- Création du type ENUM pour le rôle
+CREATE TYPE role_utilisateur AS ENUM ('admin', 'collaborateur');
+
+-- Table utilisateur
+CREATE TABLE utilisateur (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100),
+    prenom VARCHAR(100),
+    email VARCHAR(150) UNIQUE NOT NULL,
+    mot_de_passe VARCHAR(255) NOT NULL,
+    role role_utilisateur NOT NULL,
+    photo_profil TEXT,
+    date_inscription TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table groupe
+CREATE TABLE groupe (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    description TEXT,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    cree_par_id INTEGER REFERENCES utilisateur(id) ON DELETE SET NULL
+);
+
+-- Table membre_groupe
+CREATE TABLE membre_groupe (
+    utilisateur_id INTEGER REFERENCES utilisateur(id) ON DELETE CASCADE,
+    groupe_id INTEGER REFERENCES groupe(id) ON DELETE CASCADE,
+    date_join TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (utilisateur_id, groupe_id)
+);
+
+-- Table message
+CREATE TABLE message (
+    id SERIAL PRIMARY KEY,
+    groupe_id INTEGER REFERENCES groupe(id) ON DELETE CASCADE,
+    auteur_id INTEGER REFERENCES utilisateur(id) ON DELETE CASCADE,
+    contenu TEXT NOT NULL,
+    date_envoi TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table sondage
+CREATE TABLE sondage (
+    id SERIAL PRIMARY KEY,
+    groupe_id INTEGER REFERENCES groupe(id) ON DELETE CASCADE,
+    question TEXT NOT NULL,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table choix_sondage
+CREATE TABLE choix_sondage (
+    id SERIAL PRIMARY KEY,
+    sondage_id INTEGER REFERENCES sondage(id) ON DELETE CASCADE,
+    libelle TEXT NOT NULL
+);
+
+-- Table vote
+CREATE TABLE vote (
+    utilisateur_id INTEGER REFERENCES utilisateur(id) ON DELETE CASCADE,
+    choix_id INTEGER REFERENCES choix_sondage(id) ON DELETE CASCADE,
+    PRIMARY KEY (utilisateur_id, choix_id)
+);
+
+-- Table evenement
+CREATE TABLE evenement (
+    id SERIAL PRIMARY KEY,
+    titre VARCHAR(150) NOT NULL,
+    description TEXT,
+    date_debut TIMESTAMP NOT NULL,
+    date_fin TIMESTAMP NOT NULL,
+    lieu VARCHAR(150),
+    cree_par_id INTEGER REFERENCES utilisateur(id) ON DELETE SET NULL
+);
+
+-- Table participation_evenement
+CREATE TABLE participation_evenement (
+    utilisateur_id INTEGER REFERENCES utilisateur(id) ON DELETE CASCADE,
+    evenement_id INTEGER REFERENCES evenement(id) ON DELETE CASCADE,
+    PRIMARY KEY (utilisateur_id, evenement_id)
+);
+
+-- Table ressource
+CREATE TABLE ressource (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    description TEXT,
+    disponibilite BOOLEAN DEFAULT TRUE
+);
+
+-- Table reservation
+CREATE TABLE reservation (
+    id SERIAL PRIMARY KEY,
+    utilisateur_id INTEGER REFERENCES utilisateur(id) ON DELETE CASCADE,
+    ressource_id INTEGER REFERENCES ressource(id) ON DELETE CASCADE,
+    date_debut TIMESTAMP NOT NULL,
+    date_fin TIMESTAMP NOT NULL
+);
+
+-- Table notification
+CREATE TABLE notification (
+    id SERIAL PRIMARY KEY,
+    utilisateur_id INTEGER REFERENCES utilisateur(id) ON DELETE CASCADE,
+    contenu TEXT NOT NULL,
+    date_envoi TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    lu BOOLEAN DEFAULT FALSE
+);
+
+-- Table log_action
+CREATE TABLE log_action (
+    id SERIAL PRIMARY KEY,
+    utilisateur_id INTEGER REFERENCES utilisateur(id) ON DELETE SET NULL,
+    action TEXT NOT NULL,
+    date_action TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
