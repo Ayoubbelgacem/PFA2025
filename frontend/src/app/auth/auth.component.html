@@ -1,0 +1,73 @@
+<!-- Ajoute ce lien dans index.html <head> pour Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+<div class="container" [class.right-panel-active]="isRightPanelActive">
+
+  <!-- Formulaire d'inscription -->
+  <div class="form-container sign-up-container">
+    <form (ngSubmit)="onSignUp()" #signUpNgForm="ngForm">
+      <h1>Create Account</h1>
+      <input type="text" placeholder="First Name" [(ngModel)]="signUpForm.prenom" name="prenom" required />
+      <input type="text" placeholder="Last Name" [(ngModel)]="signUpForm.nom" name="nom" required />
+      <input type="email" placeholder="Email" [(ngModel)]="signUpForm.email" name="signupEmail" required />
+      <input type="password" placeholder="Password" [(ngModel)]="signUpForm.password" name="signupPassword" required />
+      <button type="submit" [disabled]="!signUpNgForm.form.valid">Sign Up</button>
+      <!--jhijhbjbihbivbijbiubjhbuhb-->
+      <p *ngIf="errorMessageSignUp" style="color:red">{{ errorMessageSignUp }}</p>
+    </form>
+  </div>
+
+  <!-- Formulaire de connexion -->
+  <div class="form-container sign-in-container">
+    <form (ngSubmit)="onSignIn()" #signInNgForm="ngForm">
+      <h1>Sign in</h1>
+      <input type="email" placeholder="Email" [(ngModel)]="signInForm.email" name="signinEmail" required />
+      <input type="password" placeholder="Password" [(ngModel)]="signInForm.password" name="signinPassword" required />
+      <button type="submit" [disabled]="!signInNgForm.form.valid">Sign In</button>
+
+<!-- Icônes sociales en bas -->
+<ul class="wrapper">
+  <li class="icon facebook">
+    <span class="tooltip">Facebook</span>
+    <span><i class="fab fa-facebook-f"></i></span>
+  </li>
+  <li class="icon twitter">
+    <span class="tooltip">Twitter</span>
+    <span><i class="fab fa-x-twitter"></i></span>
+  </li>
+  <li class="icon instagram">
+    <span class="tooltip">Instagram</span>
+    <span><i class="fab fa-instagram"></i></span>
+  </li>
+  
+</ul>
+
+      <hr style="border: 1px solid #67AE6E; width: 100%; margin: 20px 0;" />
+
+      <p style="text-align: center; margin: 0; font-size: 14px;">
+        If you have an account,
+        <a href="#" style="color: #67AE6E; text-decoration: underline; cursor: pointer;" (click)="onForgotPassword()">
+          click here to reset your password.
+        </a>
+      </p>
+
+      <p *ngIf="errorMessageSignIn" style="color:red">{{ errorMessageSignIn }}</p>
+    </form>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-left">
+        <h1>Welcome Back!</h1>
+        <p>To keep connected with us please login with your personal info</p>
+        <button class="ghost" (click)="togglePanel(false)">Sign In</button>
+      </div>
+      <div class="overlay-panel overlay-right">
+        <h1>Hello, Friend!</h1>
+        <p>Enter your personal details and start journey with us</p>
+        <button class="ghost" (click)="togglePanel(true)">Sign Up</button>
+      </div>
+    </div>
+  </div>
+</div>
