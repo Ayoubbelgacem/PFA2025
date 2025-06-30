@@ -22,10 +22,13 @@
               }
             ],
            "styles": [
-  "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-  "src/styles.css"
+  "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+],"scripts": [
+  "src/assets/js/script.js"
 ]
+
           },
+
           "configurations": {
             "production": {
               "budgets": [

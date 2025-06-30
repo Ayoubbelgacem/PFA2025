@@ -65,20 +65,21 @@ export class AuthComponent {
   }
 
   onForgotPassword(): void {
-    alert("Fonctionnalité de récupération de mot de passe à implémenter.");
-  }
+  this.router.navigate(['/forgot-password']);
+}
+
+
 
   onSignIn(): void {
-    this.errorMessageSignIn = '';
-    this.authService.login(this.signInForm).subscribe({
-      next: (res) => {
-        this.authService.saveToken(res.token);
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err) => {
-        this.errorMessageSignIn = 'Email ou mot de passe invalide';
-        console.error(err);
-      }
-    });
-  }
+  this.errorMessageSignIn = '';
+  this.authService.login(this.signInForm).subscribe({
+    next: () => {
+      this.router.navigate(['/home']);
+    },
+    error: (err) => {
+      this.errorMessageSignIn = 'Email ou mot de passe invalide';
+      console.error(err);
+    }
+  });
+}
 }

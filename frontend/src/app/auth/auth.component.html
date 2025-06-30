@@ -10,23 +10,17 @@
       <input type="text" placeholder="First Name" [(ngModel)]="signUpForm.prenom" name="prenom" required />
       <input type="text" placeholder="Last Name" [(ngModel)]="signUpForm.nom" name="nom" required />
       <input type="email" placeholder="Email" [(ngModel)]="signUpForm.email" name="signupEmail" required />
+      
       <input type="password" placeholder="Password" [(ngModel)]="signUpForm.password" name="signupPassword" required />
-      <button type="submit" [disabled]="!signUpNgForm.form.valid">Sign Up</button>
-      <!--jhijhbjbihbivbijbiubjhbuhb-->
+            <br>
+<button type="submit" [disabled]="!signUpNgForm.form.valid">Sign Up</button>
       <p *ngIf="errorMessageSignUp" style="color:red">{{ errorMessageSignUp }}</p>
-    </form>
-  </div>
 
-  <!-- Formulaire de connexion -->
-  <div class="form-container sign-in-container">
-    <form (ngSubmit)="onSignIn()" #signInNgForm="ngForm">
-      <h1>Sign in</h1>
-      <input type="email" placeholder="Email" [(ngModel)]="signInForm.email" name="signinEmail" required />
-      <input type="password" placeholder="Password" [(ngModel)]="signInForm.password" name="signinPassword" required />
-      <button type="submit" [disabled]="!signInNgForm.form.valid">Sign In</button>
-
-<!-- Icônes sociales en bas -->
-<ul class="wrapper">
+      <br>
+      <hr style="border: 1px solid #67AE6E; width: 100%; margin: 20px 0;" />
+  <p style="text-align: center; margin: 0; font-size: 16px;">
+Sing up with      </p>
+<ul class="wrapper"  >
   <li class="icon facebook">
     <span class="tooltip">Facebook</span>
     <span><i class="fab fa-facebook-f"></i></span>
@@ -42,13 +36,26 @@
   
 </ul>
 
+    </form>
+  </div>
+
+  <!-- Formulaire de connexion -->
+  <div class="form-container sign-in-container">
+    <form (ngSubmit)="onSignIn()" #signInNgForm="ngForm">
+      <h1>Sign in</h1>
+      <input type="email" placeholder="Email" [(ngModel)]="signInForm.email" name="signinEmail" required />
+      <input type="password" placeholder="Password" [(ngModel)]="signInForm.password" name="signinPassword" required />
+      <br><button type="submit" [disabled]="!signInNgForm.form.valid">Sign In</button>
+
+
       <hr style="border: 1px solid #67AE6E; width: 100%; margin: 20px 0;" />
 
       <p style="text-align: center; margin: 0; font-size: 14px;">
         If you have an account,
-        <a href="#" style="color: #67AE6E; text-decoration: underline; cursor: pointer;" (click)="onForgotPassword()">
-          click here to reset your password.
-        </a>
+      <a href="javascript:void(0)" style="color: #67AE6E; text-decoration: underline; cursor: pointer;" (click)="onForgotPassword()">
+  click here to reset your password.
+</a>
+
       </p>
 
       <p *ngIf="errorMessageSignIn" style="color:red">{{ errorMessageSignIn }}</p>

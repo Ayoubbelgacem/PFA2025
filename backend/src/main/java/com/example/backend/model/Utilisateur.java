@@ -29,8 +29,9 @@ public class Utilisateur implements UserDetails {
     private String motDePasse;
 
 //    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private RoleUtilisateur role;
+@Enumerated(EnumType.ORDINAL)
+@Column(name = "role")
+private RoleUtilisateur role;
 
 
 

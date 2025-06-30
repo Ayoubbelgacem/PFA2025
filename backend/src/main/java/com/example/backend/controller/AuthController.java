@@ -1,11 +1,10 @@
-
 package com.example.backend.controller;
 
 import com.example.backend.dto.*;
-import com.example.backend.model.*;
-import com.example.backend.service.*;
+import com.example.backend.service.AuthService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,59 +13,50 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final RefreshTokenService refreshTokenService;
 
     @Autowired
-    public AuthController(AuthService authService, RefreshTokenService refreshTokenService) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
-        this.refreshTokenService = refreshTokenService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthRequest request) {
-        try {
-            return ResponseEntity.ok(authService.login(request));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new AuthResponse(null, null));
-        }
+    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+        return authService.loginService(request);
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        try {
-            Object response = authService.register(request);
-            if (response instanceof MessageResponse) {
-                return ResponseEntity.badRequest().body(response);
-            }
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Erreur lors de l'enregistrement: " + e.getMessage()));
-        }
+        return authService.registerService(request);
     }
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestParam String email) {
-        return ResponseEntity.ok(authService.processForgotPassword(email));
+        return authService.forgotPasswordService(email);
     }
 
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
-        return ResponseEntity.ok(authService.resetPassword(token, newPassword));
+        return authService.resetPasswordService(token, newPassword);
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<AuthResponse> refreshToken(@RequestBody TokenRefreshRequest request) {
-        String requestToken = request.getRefreshToken();
-        return refreshTokenService.findByToken(requestToken)
-                .map(refreshTokenService::verifyExpiration)
-                .map(RefreshToken::getUtilisateur)
-                .map(user -> {
-                    String newAccessToken = authService.generateAccessToken(user.getEmail());
-                    return ResponseEntity.ok(new AuthResponse(newAccessToken, requestToken));
-                })
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new AuthResponse(null, null)));
+    public ResponseEntity<?> refreshToken(@RequestBody TokenRefreshRequest request) {
+        return authService.refreshTokenService(request);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser() {
+        return authService.getCurrentUserService();
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(@RequestBody UpdateUserRequest updatedUserRequest) {
+        return authService.updateProfileService(updatedUserRequest);
+    }
+
+    @DeleteMapping("/delete-account")
+    @Transactional
+    public ResponseEntity<?> deleteAccount() {
+        return authService.deleteAccountService();
     }
 }

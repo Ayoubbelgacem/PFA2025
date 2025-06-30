@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import { AuthComponent } from './auth/auth.component'; // Notez le .component
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [AuthComponent], // AuthComponent doit être standalone
-  template: '<app-auth></app-auth>',
+  imports: [RouterModule],
+  template: '<router-outlet></router-outlet>',
 })
-export class AppComponent {
-  title = 'PFA2025';
-}
+export class AppComponent {}
